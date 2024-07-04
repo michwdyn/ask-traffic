@@ -1,9 +1,7 @@
 from flask import Flask, render_template, request
 import google.generativeai as palm
-import os
 
-api_key= os.getenv("MAKERSUITE_API_TOKEN")
-palm.configure(api_key=api_key)
+palm.configure(api_key="AIzaSyBDZnlNh2tzP16nA1m0XsWVvY-vLt1d59Q")
 
 model = { 'model': "models/chat-bison-001"}
 
@@ -22,6 +20,19 @@ def main():
 @app.route("/traffic_thailand", methods=["GET","POST"])
 def traffic_thailand():
     q = "thailand traffic"
+    r = palm.chat(**model, messages=q)
+    return(render_template("traffic_thailand.html",r=r.last))
+
+@app.route("/traffic_singapore", methods=["GET","POST"])
+def traffic_singapore():
+    q = "singapore traffic"
+    r = palm.chat(**model, messages=q)
+    return(render_template("traffic_singapore.html",r=r.last))
+
+@app.route("/traffic_others", methods=["GET","POST"])
+def traffic_others():
+    q = request.form.get("q")
+    q = q + " traffic"
     r = palm.chat(**model, messages=q)
     return(render_template("traffic_thailand.html",r=r.last))
 
